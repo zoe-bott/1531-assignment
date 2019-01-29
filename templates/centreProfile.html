@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block body %}
+    <h1>{{ centre.name }}</h1>
+
+    <h4>Details:</h4>
+    <table class="table">
+            <tr>
+                <th>Type: </th>
+                <td>{{ centre.typeOfCentre }}</td>
+            </tr>
+            <tr>
+                <th>Phone: </th>
+                <td>{{ centre.phone }}</td>
+            </tr>
+            <tr>
+                <th>Address: </th>
+                <td>{{ centre.address }}</td>
+            <tr>
+                <th>Suburb: </th>
+                <td>{{ centre.suburb }}</td>
+            </tr>
+            <tr>
+                <th>Rating: </th>
+                <td>{{ centre.averageRating }}</td>
+            </tr>
+    </table>
+    <br>
+    <h4>Providers: </h4>
+    <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Provider</th>
+                    <th scope="col">Profession</th>
+                    <th scope="col">Hours</th>
+                </tr>
+            </thead>
+            {% for provider in centre.providers %}
+            <tr>
+                <th scope="row"> <a href="{{ url_for('provider_profile', email=provider.email) }}">{{ provider.name }}</a> </th>
+                <td>{{ provider.profession }}</td>
+                <td> 
+                    {% for hour in centre.providers[provider] %}
+                        {% if hour != centre.providers[provider][-1]%}
+                            {{ hour }}, 
+                        {% else %}
+                            {{ hour }}
+                        {% endif %}
+                    {% endfor %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    {% if user.is_patient %}
+    <br><br>
+    <a href="{{ url_for('makeBooking', centreID=centre.ident) }}" class="btn btn-primary btn-block" role="button">Book Appointment</a>
+    {% endif %}
+{% endblock %}

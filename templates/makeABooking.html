@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block body %}
+<h1>Make a Booking at {{centre.name}}</h1>
+<form method="POST">
+    <input type="hidden" name="form-name" value="form1">
+    <h3>Select a doctor:</h3>
+    <div class="form-row align-items-center">
+      <div class="col-sm-3 my-1">
+        <select name="provider" class="form-control">
+          {% for provider in centre.providers %}
+            {% if provider == chosenProvider %}
+              <option value="{{provider.name}}" selected>{{provider.name}}</option>
+            {% else %}
+              <option value="{{provider.name}}">{{provider.name}}</option>
+            {% endif %}
+          {% endfor %}
+        </select>
+      </div>
+      <div class = "col-sm-1 my-1">
+        <button type="submit" class="btn form-control btn-link">Select</button>
+      </div>
+    </div>
+  </form>
+  {% if providerSelected %}
+  <br>
+  <form method="POST">
+    <h3>Select a date:</h3>
+    {% if dateSelected and date %}
+      Date selected: {{ date }}
+    {% endif %}
+    <input type="hidden" name="form-name" value="form2">
+    <input type="hidden" name="provider" value="{{ chosenProvider.name }}">
+    <div class="form-row align-items-center">
+        <div class="col-sm-3 my-1">
+          <input type="date" name="date" class="datepicker form-control">
+      </div>
+      <div class = "col-sm-1 my-1">
+        <button type="submit" class="btn form-control btn-link">Select</button>
+      </div>
+  </div>
+  </form>
+  {% if error %}
+    <p style="color:red">{{ error }}</p>
+  {% endif %}
+  {% if dateSelected %}
+  <br>
+    <form method="POST">
+      <h3>Select a time:</h3>
+      <input type="hidden" name="form-name" value="form3">
+      <input type="hidden" name="provider" value="{{ chosenProvider.name }}">
+      <input type="hidden" name="date" value="{{ date }}"> 
+      {% if not hours %}
+        <p>No avaiable hours, please choose another date.</p>
+      {% else %}
+      <div class="form-row align-items-center">
+          <div class="col-sm-3 my-1">
+            <select name = "time" class="form-control">
+              {% for hour in hours %}
+                  <option value="{{hour}}" selected>{{hour}}</option>
+              {% endfor %}
+            </select>
+        </div>
+      </div>
+    <br><br><br><br>
+    <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  {% endif %}
+  {% endif %}
+  
+  {% endif %}
+
+{% endblock %}

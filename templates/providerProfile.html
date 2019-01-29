@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block body %}
+
+<h1>Profile page for {{ provider.name }}</h1>
+
+<h4>Profession: </h4>{{ provider.profession }}
+
+<br><br>
+<h4>Contact details: </h4>
+<table class="table">
+    <tr>
+        <th>Email: </th>
+        <td>{{ provider.email }}</td>
+    </tr>
+    <tr>
+        <th>Name: </th>
+        <td>{{ provider.name }}</td>
+    </tr>
+    <tr>
+        <th>Phone: </th>
+        <td>{{ provider.phone }}</td>
+    </tr>
+    <tr>
+        <th>Provider number: </th>
+        <td>{{ provider.providerNumber }}</td>
+    </tr>
+    <tr>
+        <th>Rating: </th>
+            <td>{{ provider.averageRating }}</td>
+        </tr>
+</table>
+<br>
+{%if current_user==provider %}
+    <button class="btn btn-primary"><a href="{{ url_for('edit_profile', email=user.email) }}" style="color:white">Edit Profile</a></button>
+{% endif %}
+<br><br>
+<h4>Centres: </h4>
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Centre</th>
+            <th scope="col">Hours</th>
+        </tr>
+    </thead>
+    {% for centre in provider.centres %}
+    <tr>
+        
+        <th scope="row"> <a href="{{ url_for('centre_profile', id=centre.ident) }}">{{ centre.name }}</a> </th>
+        <td> 
+            {% for hour in provider.centres[centre] %}
+                {% if hour != provider.centres[centre][-1]%}
+                    {{ hour }}, 
+                {% else %}
+                    {{ hour }}
+                {% endif %}
+            {% endfor %}
+        </td>
+    </tr>
+{% endfor %}
+</table>
+{% endblock %}

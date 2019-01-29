@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block body %}
+<h1>Booking</h1>
+<table class="table">
+    <tr>
+        {% if user.is_patient %}
+        <th>Provider: </th>
+        <td><a href = "{{ url_for('provider_profile', email=booking.provider.email) }}">{{ booking.provider.name }}</a></td>
+        {% else %}
+        <th>Patient: </th>
+        <td><a href = "{{ url_for('patient_profile', email=booking.patient.email) }}">{{ booking.patient.name }}</a></td>
+        {% endif %}
+    <tr>
+        <th>Centre: </th>
+        <td><a href = "{{ url_for('centre_profile', id=booking.centre.ident) }}">{{ booking.centre.name }}</a></td>
+    </tr>
+    <tr>
+        <th>Date: </th>
+        <td>{{ booking.date }}</td>
+    </tr>
+    <tr>
+        <th>Time: </th>
+        <td>{{ booking.time }}</td>
+    </tr>  
+</table>
+<!--{%if user in booking.patient.authorisedUsers%}
+    <b> Previous Notes for {{ booking.patient.name }}: </b>
+    <br>
+    {%for theBooking in booking.patient.bookings%}
+        {%if theBooking.completed%}
+            <b>{{theBooking.provider.name}} noted:</b><br>
+            <p>{{ theBooking.notes }}</p>
+            <br>
+        {%endif%}
+    {%endfor%}
+{%endif%}-->
+{% if not user.is_patient and not booking.completed%}
+    <form method="POST">
+        <input type="hidden" name="form-name" value="notesForm">
+        <div class="form-group">
+            <label for="exampleFormControlTextarea1">Add Notes: </label>
+            <textarea class="form-control" name="notes" rows="4"></textarea>
+        </div>
+        <button class="btn btn-primary" type="submit">Submit and mark appointment as complete</button>
+    </form>
+{% elif booking.completed%}
+    <br>
+    <b> Notes from {{ booking.provider.name }}: </b>
+    <p>{{ booking.notes }}</p>
+    {% if user.is_patient and not booking.rated %}
+        <br>
+        <h5>Give a rating</h5>
+        <form method="POST">
+            <input type="hidden" name="form-name" value="ratingForm">
+            <div class="form-group">
+                <label for="exampleFormControlSelect1"><b>Rate {{ booking.centre.name }}</b>: (1-low, 5-excellent)</label>
+                <div class="col-sm-10">
+                    <select class="form-control form-control-lg" name="centreRating">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                    <label for="exampleFormControlSelect1"><b>Rate {{ booking.provider.name }}</b>: (1-low, 5-excellent)</label>
+                    <div class="col-sm-10">
+                        <select class="form-control form-control-lg" name="providerRating">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                        </select>
+                    </div>
+                </div>
+            <button type="submit" class="btn btn-secondary">Submit</button>
+        </form>
+    {% endif %}
+{% endif %}
+{% endblock %}

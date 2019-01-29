@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block body %}
+<h3>
+    Appointments
+  </h3>
+
+  <br>
+  <h5>Upcoming Appointments</h5>
+  <table class = "table table-striped table-hover">
+    <thead class="thead-dark">
+      <tr>
+        <th>
+          Date
+        </th>
+        <th>
+          Time
+        </th>
+        <th>
+          Centre Name
+        </th>
+        <th>
+          {% if user.is_patient %}
+            Doctor
+          {% else %}
+            Patient
+          {% endif %}
+        </th>
+      </tr>
+    </thead>
+    {% for booking in user.bookings %} 
+      {% if not booking.completed %}
+        <tr class='clickable-row' data-href="{{ url_for('viewABooking', bookingID=booking.id)  }}">
+          <th>
+            {{booking.date}}  
+          </th>
+          <th>
+            {{booking.time}}
+          </th>
+          <th>
+            {{booking.centre.name}} 
+          </th>
+          <th>
+              {% if user.is_patient %}
+                {{booking.provider.name}}
+              {% else %}
+                {{booking.patient.name}}
+              {% endif %}
+            
+          </th>
+        </tr>
+      {% endif %}
+    {% endfor %}
+  </table>
+
+  <br><br>
+  <h5>Completed Appointments</h5>
+  <table class = "table table-striped table-hover">
+      <thead class="thead-dark">
+        <tr>
+          <th>
+            Date
+          </th>
+          <th>
+            Time
+          </th>
+          <th>
+            Centre Name
+          </th>
+          <th>
+            {% if user.is_patient %}
+              Doctor
+            {% else %}
+              Patient
+            {% endif %}
+          </th>
+        </tr>
+      </thead>
+      {% for booking in user.bookings %} 
+        {% if booking.completed %}
+          <tr class='clickable-row' data-href="{{ url_for('viewABooking', bookingID=booking.id)  }}">
+            <th>
+              {{booking.date}}  
+            </th>
+            <th>
+              {{booking.time}}
+            </th>
+            <th>
+              {{booking.centre}} 
+            </th>
+            <th>
+                {% if user.is_patient %}
+                  {{booking.provider.name}}
+                {% else %}
+                  {{booking.patient.name}}
+                {% endif %}
+              
+            </th>
+          </tr>
+        {% endif %}
+      {% endfor %}
+    </table>
+</body>
+</html>
+{% endblock %}

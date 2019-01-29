@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block body %}
+
+<h1>Search</h1>
+<br>
+<form method="POST">
+    <div class = "form-group row">
+        <div class="col-sm-6">
+            <input type="search" name="search" , placeholder="Search for health care providers and centres...", class="form-control">
+        </div>
+        <div class="col-sm-3">
+             <input type="submit" value="GO" class="btn btn-primary">
+        </div>
+    </div>
+    <div>
+        <label>Search for: </label><br>
+        <input type="radio", name="searchFor", value="centre"> Health care centre<br>
+        <input type="radio", name="searchFor", value="provider"> Health care provider<br>
+        <input type="radio", name="searchFor", value="all", checked="checked"> All<br>
+        <label>Search by: </label><br>
+        <input type="radio", name="searchBy", value="name"> Name<br>
+        <input type="radio", name="searchBy", value="profession"> Profession<br>
+        <input type="radio", name="searchBy", value="suburb"> Suburb<br>
+        <input type="radio", name="searchBy", value="all", checked="checked"> All<br><br>
+    </div>
+</form>
+{% if showResults %}
+    <div>
+        <h2>Search results for {{ searchTerm }}</h2>
+        <table class = "table table-hover">
+                <tr>
+                    <th>Type</th>
+                    <th>Name</th>
+                </tr>
+                {% for result in results %}
+                    <tr>
+                        <td>{{ result[0] }}</td>
+                        {% if result[0] == "Provider" %}
+                            <td><a href = "{{ url_for('provider_profile', email=result[1].email) }}">{{ result[1].name }}, {{ result[1].profession }}</a></td>
+                        {% else %}
+                            <td><a href = "{{ url_for('centre_profile', id=result[1].ident) }}">{{ result[1].name }}, {{ result[1].suburb }}</a></td>
+                        {% endif %}
+                    
+                    </tr>
+                {% endfor %}
+        </table>
+    </div>
+{% endif %}
+
+{% endblock %}

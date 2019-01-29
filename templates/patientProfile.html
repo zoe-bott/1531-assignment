@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block body %}
+
+<h1>{{ patient.name }}</h1>
+
+<table class="table">
+    <tr>
+        <th>Email: </th>
+        <td>{{ patient.email }}</td>
+    </tr>
+    <tr>
+        <th>Name: </th>
+        <td>{{ patient.name }}</td>
+    </tr>
+    <tr>
+        <th>Phone: </th>
+        <td>{{ patient.phone }}</td>
+    </tr>
+    <tr>
+        <th>Medicare: </th>
+        <td>{{ patient.medicare }}</td>
+    </tr>
+</table>
+<br><br>
+{%if user.is_patient %}
+    <button class="btn btn-primary"><a href="{{ url_for('edit_profile', email=user.email) }}" style="color:white">Edit Profile</a></button>
+{% endif %}
+{%if user in patient.authorisedUsers %}
+    <h4> Notes from previous appointments: </h4>
+    <hr>
+    {%for booking in patient.bookings%}
+        {%if booking.completed%}
+            <h5><b><u>{{ booking.date }}</u></b></h5>
+            <b>{{booking.provider.name}} noted:</b><br>
+            <p>{{ booking.notes }}</p>
+            <a href="{{ url_for('viewABooking', bookingID=booking.id)  }}">View details</a>
+            <hr>
+        {%endif%}
+    {%endfor%}
+{%endif%}
+
+{% endblock %}

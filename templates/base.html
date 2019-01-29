@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+  <head>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <title>Healthcare Website</title>
+
+    <style>
+      #content {
+        margin:50px;
+      }
+      .table {
+        margin:auto;
+      }
+      .topnav-right {
+        float: right;
+      }
+      tr.clickable-row{
+        cursor: pointer;
+      }
+    </style>
+    <script>
+        jQuery(document).ready(function($) {
+          $(".clickable-row").click(function() {
+              window.location = $(this).data("href");
+          });
+      });
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="{{ url_for('home')}}">E-Health Booking Managment System</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('home')}}">Home <span class="sr-only">(current)</span></a>
+            </li>
+            {% if user.is_patient %}
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('search') }}">Search</a>
+              </li>
+            {% endif %}
+            <li class="nav-item">
+                {% if user.is_patient %}
+                  <a class="nav-link" href="{{ url_for('patient_profile', email=user.email)}} ">Profile</a>
+                {% else %}
+                  <a class="nav-link" href="{{ url_for('provider_profile', email=user.email)}} ">Profile</a>
+                {% endif %}
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('viewBookings') }}">Appointments</a>
+            </li>
+            <div class="topnav-right">
+              <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+              </li>
+            </div>
+          </ul>
+        </div>
+      </nav>
+    <div id="content">{% block body %}{% endblock %}</div>
+  </body>
+</html>

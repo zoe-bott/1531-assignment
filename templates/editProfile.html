@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block body %}
+
+<h1>Edit Profile Details</h1>
+<form method="POST">
+    <div class="form-row align-items-center">
+        <div class="col-sm-1"><b>Name: </b></div>
+            <div class="col-sm-3 my-1">
+                <input class="form-control" name="name" value="{{ user.name }}">
+                {% if errors and 'name' in errors %} <p style="color:red">{{ errors['name'] }}</p> {% endif %}
+            </div>
+    </div>
+    <div class="form-row align-items-center">
+       <div class="col-sm-1"><b>Email: </b></div>
+        <div class="col-sm-3 my-1">
+                <input class="form-control" name="email" value="{{ user.email }}">
+                {% if errors and 'email' in errors %} <p style="color:red">{{ errors['email'] }}</p> {% endif %}
+        </div>
+    </div>
+    <div class="form-row align-items-center">
+        <div class="col-sm-1"><b>Phone: </b></div>
+            <div class="col-sm-3 my-1">
+                <input class="form-control" name="phone" value="{{ user.phone }}">
+                {% if errors and 'phone' in errors %} <p style="color:red">{{ errors['phone'] }}</p> {% endif %}
+            </div>
+        </div>
+    <br>
+    <button class="btn btn-primary" type="submit">Submit</button>
+</form>
+
+{% endblock %}
